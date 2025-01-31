@@ -1,6 +1,6 @@
-import { Position } from "../position";
-
 export { Tile };
+
+import { Position } from "./position.ts";
 
 class Tile {
     id: number;
@@ -20,22 +20,26 @@ class Tile {
         this.being_dragged = false;
 
         this.update_position();
-    }
-
-    update_position() {
-        console.log(`${this.id}`);
         let tile = document.getElementById(`${this.id}`);
-        console.log(tile);
         if (tile == null) {
-            console.log(document);
             console.error("Tile didn't exist");
             return
         }
-        tile.style.left = this.x.toString();
-        tile.style.top = this.y.toString();
+        tile.onmousedown = this.mousedown;
     }
 
-    mousedown(e: MouseEvent) {
+    update_position() {
+        let tile = document.getElementById(`${this.id}`);
+        if (tile == null) {
+            console.error("Tile didn't exist");
+            return
+        }
+        tile.style.left = this.x.toString() + "px";
+        tile.style.top = this.y.toString() + "px";
+    }
+
+    mousedown = (e: MouseEvent) => {
+        console.log(e);
         this.being_dragged = true;
         document.onmousemove = this.mousemove;
         document.onmouseup = this.mouseup;

@@ -1,6 +1,6 @@
 export { Simulation };
 
-import { Tile } from "./tile.svelte";
+import { Tile } from "./tile.ts";
 
 class Simulation {
     max_x: number;
