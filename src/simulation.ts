@@ -134,7 +134,7 @@ class Simulation {
             "https://github.com/Banzobotic/dymaxilang",
             null,
             "https://github.com/Banzobotic/andrewtwigg.me",
-            "https://andrewtwigg.me/games"
+            "https://old.andrewtwigg.me/games"
         ];
 
         Events.on(mouse_constraint, "mousedown", (e) => {
