@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "bun run gh-pages.js"
+    "deploy": "bun run build && bun run gh-pages.js"
   },
   "devDependencies": {
     "gh-pages": "^6.3.0",
