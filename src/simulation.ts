@@ -8,6 +8,7 @@ class Simulation {
     dom_tiles: Array<HTMLElement>;
     walls: Array<Body>;
     engine: Engine;
+    render?: Render;
 
     constructor() {
         this.tiles = [];
@@ -21,6 +22,7 @@ class Simulation {
             positionIterations: 100,
             velocityIterations: 100,
         });
+        this.render = undefined;
     }
 
     init() {
@@ -31,7 +33,7 @@ class Simulation {
             console.error("Debug render target not found");
             return;
         }
-        let render = Render.create({
+        this.render = Render.create({
             element: debug_render_target,
             options: {
                 width: window.innerWidth,
@@ -46,7 +48,7 @@ class Simulation {
         this.walls = this.generate_walls();
         Composite.add(this.engine.world, this.walls);
 
-        let mouse = Mouse.create(render.canvas);
+        let mouse = Mouse.create(this.render.canvas);
         let mouse_constraint = MouseConstraint.create(this.engine, {
             mouse: mouse,
             constraint: {
@@ -59,9 +61,9 @@ class Simulation {
         });
 
         Composite.add(this.engine.world, mouse_constraint);
-        render.mouse = mouse;
+        this.render.mouse = mouse;
 
-        Render.run(render);
+        Render.run(this.render);
 
         let runner = Runner.create({
             delta: 1000 / 2000,
@@ -89,7 +91,10 @@ class Simulation {
 
         Events.on(mouse_constraint, "mousedown", (e) => {
             mouse_moved = false;
-            target = e.source.body.id;
+
+            if (e.source.body != null) {
+                target = e.source.body.id;
+            }
         });
 
         Events.on(mouse_constraint, "mousemove", (e) => {
@@ -194,5 +199,14 @@ class Simulation {
         this.walls = this.generate_walls();
         Composite.add(this.engine.world, this.tiles);
         Composite.add(this.engine.world, this.walls);
+
+        if (this.render !== undefined) {
+            this.render.bounds.max.x = window.innerWidth;
+            this.render.bounds.max.y = window.innerHeight;
+            this.render.options.width = window.innerWidth;
+            this.render.options.height = window.innerHeight;
+            this.render.canvas.width = window.innerWidth;
+            this.render.canvas.height = window.innerHeight;
+        }
     }
 }
